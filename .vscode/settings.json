@@ -1,3 +1,4 @@
 {
-    "eslint.validate": ["typescript", "json", "jsonc", "markdown"]
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome"
 }
