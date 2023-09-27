@@ -16,42 +16,26 @@ jobs:
         working-directory: extensions/helloworld
     outputs:
       GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        id: pnpm-install
+          node-version: 20.x
+      - run: corepack prepare pnpm@latest --activate
+      - id: pnpm
+        run: echo "cache-dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
         with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --no-optional
+          path: ${{ steps.pnpm.outputs.cache-dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --no-optional
 
       - name: Get the date on Ubuntu/MacOS
         id: date_unix
         run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
-
       - name: Cache .vscode-test
         uses: actions/cache@v3
         env:
@@ -82,46 +66,27 @@ jobs:
       run:
         working-directory: extensions/helloworld
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+          node-version: 20.x
+      - run: corepack prepare pnpm@latest --activate
+      - id: pnpm
+        run: echo "cache-dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
         with:
-          node-version: 18.x
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        id: pnpm-install
-        with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{ steps.pnpm.outputs.cache-dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --no-optional
+            ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --no-optional
 
       - name: Publish to Visual Studio Marketplace
         run: pnpm run publish
         env:
           VSCE_PAT: ${{ secrets.VS_MARKETPLACE_TOKEN }}
 
-      - name: Github Release
-        run: npx changelogithub
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      # - name: Github Release
+      #   run: npx changelogithub
+      #   env:
+      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
