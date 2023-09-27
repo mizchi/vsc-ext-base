@@ -9,8 +9,11 @@ on:
       - main
 
 jobs:
-  test:
+  helloworld-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extensions/helloworld
     outputs:
       GIT_TAG: ${{ steps.set-tag.outputs.GIT_TAG }}
     steps:
@@ -71,10 +74,13 @@ jobs:
             echo "GIT_TAG=''" >> $GITHUB_OUTPUT
           fi
 
-  publish:
-    needs: test
-    if: startsWith(needs.test.outputs.GIT_TAG, 'v')
+  helloworld-publish:
+    needs: helloworld-test
+    if: startsWith(needs.helloworld-test.outputs.GIT_TAG, 'v')
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extensions/helloworld
     steps:
       - name: Checkout
         uses: actions/checkout@v3
