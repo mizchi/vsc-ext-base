@@ -2,13 +2,13 @@ import vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
   console.log(
-    'Congratulations, your extension "awesome-vscode-extension-boilerplate" is now active!',
+    'Congratulations, your extension "helloworld" is now active!',
   );
   const disposable = vscode.commands.registerCommand(
-    "awesome-vscode-extension-boilerplate.helloWorld",
+    "helloworld.helloWorld",
     () => {
       vscode.window.showInformationMessage(
-        "Hello World from Awesome VSCode Extension Boilerplate!",
+        "Ok",
       );
     },
   );
@@ -17,4 +17,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

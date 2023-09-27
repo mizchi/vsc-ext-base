@@ -1,5 +1,5 @@
 {
-  "name": "awesome-vscode-extension-boilerplate",
+  "name": "helloworld",
   "displayName": "Awesome VSCode Extension Boilerplate",
   "version": "0.0.29",
   "description": "An awesome vscode extension boilerplate",
@@ -12,7 +12,7 @@
     "url": "https://github.com/mizchi"
   },
   "license": "MIT",
-  "homepage": "https://github.com/mizchi/awesome-vscode-extension-boilerplate/blob/master/README.md",
+  "homepage": "https://github.com/mizchi/helloworld/blob/master/README.md",
   "main": "./out/src/extension.js",
   "icon": "assets/logo.png",
   "engines": {
@@ -22,7 +22,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "awesome-vscode-extension-boilerplate.helloWorld",
+        "command": "helloworld.helloWorld",
         "title": "Hello World"
       }
     ]
