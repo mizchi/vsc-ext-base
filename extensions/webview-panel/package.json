@@ -22,8 +22,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "helloworld.helloWorld",
-        "title": "Hello World"
+        "command": "webview-panel.start",
+        "title": "Start panel"
       }
     ]
   },

@@ -10,5 +10,6 @@
     "skipLibCheck": true,
     "rootDir": "test",
     "outDir": "dist"
-  }
+  },
+  "include": ["test/**/*"]
 }
